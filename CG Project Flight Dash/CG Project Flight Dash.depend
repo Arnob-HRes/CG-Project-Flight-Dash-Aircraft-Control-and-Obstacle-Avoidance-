@@ -1,10 +1,5 @@
 # depslib dependency file v1.0
-1766770036 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\main_game_page.cpp
-	<windows.h>
-	<GL/glut.h>
-	<cmath>
-
-1766768792 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\main.cpp
+1767020499 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\main.cpp
 	<iostream>
 	<fstream>
 	<string.h>
@@ -226,4 +221,13 @@
 1301111164 a:\softwares\codeblocks_graphice\codeblocks\mingw\include\gl\glu.h
 	<stddef.h>
 	<GL/gl.h>
+
+1767164186 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\main_game_page.cpp
+	<windows.h>
+	<GL/glut.h>
+	<cmath>
+
+1767021654 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\resources.rc
+
+1767164240 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\animation.cpp
 

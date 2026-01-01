@@ -20,21 +20,37 @@ void LOGIN_PAGE(){
     cin>>USER;
     cout<<"\t\t\t\t                   PASSWORD: ";
     cin>>PASS;
-    cout<<"\t\t\t\t_______________________________________________________________\n\n";
 
-    ifstream check("USER.txt");
+    ifstream check("USER_INFORMATION.txt");
 
     while(check>>user>>pass){
         if(user==USER && pass==PASS){
             Validity=true;
+            break;
         }
     }
     check.close();
     if(Validity){
+        cout<<"\t\t\t\t_______________________________________________________________\n\n";
+        cout<<"\n\t\t\t\t                   Login Successful!\n";
+        cout<<"\n\t\t\t\t                   USER: "<<USER<<"\n\n";
+        cout<<"\t\t\t\t_______________________________________________________________\n\n";
+        system("pause");
         system("cls");
-        cout<<"\n\t\t\t\tLogin Successful!\n";
-        cout<<"\t\t\t\tLaunching Flight Dash...\n";
-
+        cout<<"\t\t\t\t\t|-----------------FLIGHT DASH-----------------|\n\t\t\t\t\t|                                             |\n";
+        cout<<"\t\t\t\t\t|     WELCOME TO A 2D FLIGHT SIMULATING GAME  |\n\t\t\t\t\t|                                             |\n";
+        cout<<"\t\t\t\t\t|----------------LONCHING GAME----------------|\n\n\n\n";
+        cout<<"\t\t\t\t_______________________________________________________________\n\n";
+        cout<<"\t\t\t\t                Launching Flight Dash...\n\n";
+        char a=221;
+        cout<<"\t\t\t\t       Loading: ";
+        for(int i=0;i<=30;i++){
+            cout<<a;
+            Sleep(100+i+i);
+        }
+        cout<<"\n\n\t\t\t\t                 100% Loading Successful\n\n";
+        cout<<"\t\t\t\t_______________________________________________________________\n\n\n\n\t\t\t\t";
+        system("pause");
         startMainGame(__argc, __argv);
     }
     else{
@@ -106,7 +122,7 @@ void Registration(){
     cin>>PASS;
     cout<<"\t\t\t\t_______________________________________________________________\n\n";
 
-    ifstream check("USER.txt");
+    ifstream check("USER_INFORMATION.txt");
     while(check >> user >> pass){
         if(USER == user){
             Validity = true;
@@ -120,17 +136,17 @@ void Registration(){
         return;
     }
 
-    ofstream reg("USER.txt", std::ios::app);
+    ofstream reg("USER_INFORMATION.txt", std::ios::app);
     if(!reg){
         cout << "File open failed!\n";
         return;
     }
 
-    reg << USER << " " << PASS << endl;
+    reg << USER << " " << PASS <<endl;
     reg.close();
 
     system("cls");
-    cout << "\nUser [" << USER << "] successfully registered!\n";
+    cout << "\nUser [" << USER << "] successfully registered!\n\n";
     main();
 }
 

@@ -1,10 +1,13 @@
 #include <windows.h>
+#include<fstream>
 #include <GL/glut.h>
 #include <cmath>
 
 float PI = 3.14159265f;
+void idle() {
+ glutPostRedisplay();
+}
 
-/* ================= CIRCLE ================= */
 void drawFilledCircle(GLfloat x, GLfloat y, GLfloat radius)
 {
     int triangleAmount = 40;
@@ -17,363 +20,425 @@ void drawFilledCircle(GLfloat x, GLfloat y, GLfloat radius)
     glEnd();
 }
 
-/* ================= ROADS ================= */
-void drawRoad(float x1, float y1, float x2, float y2)
+void drawHollowCircle(GLfloat x, GLfloat y, GLfloat radius){
+	int i;
+	int lineAmount = 100;
+
+	GLfloat twicePi = 2.0f * PI;
+	glBegin(GL_LINE_LOOP);
+		for(i = 0; i <= lineAmount;i++)
+        {
+			glVertex2f( x + (radius * cos(i *  twicePi / lineAmount)),
+            y + (radius* sin(i * twicePi / lineAmount)));
+		}
+	glEnd();
+}
+
+void BackGround()
 {
-    glColor3f(0.35f, 0.35f, 0.35f); // dark gray
     glBegin(GL_QUADS);
-        glVertex2f(x1, y1); glVertex2f(x2, y1);
-        glVertex2f(x2, y2); glVertex2f(x1, y2);
+        glColor3ub(240, 234, 223);
+        glVertex2f(0.0f,70.0f);
+        glVertex2f(0.0f,540.0f);
+        glVertex2f(-500.0f,540.0f);
+        glVertex2f(-500.0f,70.0f);
     glEnd();
-}
-
-/* ================= DASHED CENTER LINE ================= */
-void drawDashedCenter(bool horizontal, float pos, float start, float end)
-{
-    glColor3f(1.0f, 0.9f, 0.0f);
-    glLineWidth(3.0f);
-    float dash = 15.0f, gap = 15.0f;
-    float total = horizontal ? (end - start) : (end - start);
-    for(float i = 0; i < total; i += dash + gap)
-    {
-        float s = i;
-        float e = i + dash;
-        if(e > total) e = total;
-        glBegin(GL_LINES);
-        if(horizontal)
-        {
-            glVertex2f(start + s, pos);
-            glVertex2f(start + e, pos);
-        }
-        else
-        {
-            glVertex2f(pos, start + s);
-            glVertex2f(pos, start + e);
-        }
-        glEnd();
-    }
-}
-
-/* ================= ZEBRA CROSSING ================= */
-void drawZebra(float x, float y, bool horizontal, int lanes = 8)
-{
-    glColor3f(1.0f, 1.0f, 1.0f);
-    float stripeW = 8.0f, gap = 8.0f;
-    for(int i = 0; i < lanes; i++)
-    {
-        float offset = i * (stripeW + gap);
-        glBegin(GL_QUADS);
-        if(horizontal)
-        {
-            glVertex2f(x + offset, y - 45);
-            glVertex2f(x + offset + stripeW, y - 45);
-            glVertex2f(x + offset + stripeW, y + 45);
-            glVertex2f(x + offset, y + 45);
-        }
-        else
-        {
-            glVertex2f(x - 45, y + offset);
-            glVertex2f(x + 45, y + offset);
-            glVertex2f(x + 45, y + offset + stripeW);
-            glVertex2f(x - 45, y + offset + stripeW);
-        }
-        glEnd();
-    }
-}
-
-/* ================= RED-ROOF HOUSE ================= */
-void drawRedHouse(float cx, float cy)
-{
-    // Base
-    glColor3f(0.95f, 0.95f, 0.85f);
+    glColor3ub(192, 187, 178);
+    drawFilledCircle(-320.0f,335.0f,50);
+    drawFilledCircle(-455,435,10);
+    drawFilledCircle(-355,435,10);
+    drawFilledCircle(-455,235,10);
+    drawFilledCircle(-355,235,10);
     glBegin(GL_QUADS);
-        glVertex2f(cx-25, cy-25);
-        glVertex2f(cx+25, cy-25);
-        glVertex2f(cx+25, cy+20);
-        glVertex2f(cx-25, cy+20);
-    glEnd();
-    // Red roof
-    glColor3f(0.9f, 0.1f, 0.1f);
-    glBegin(GL_TRIANGLES);
-        glVertex2f(cx-30, cy+20);
-        glVertex2f(cx+30, cy+20);
-        glVertex2f(cx, cy+45);
-    glEnd();
-}
+        glColor3ub(192, 187, 178);
 
-/* ================= TREE (NORMAL & PALM) ================= */
-void drawTree(float x, float y, bool palm = false)
-{
-    if(palm)
-    {
-        // Trunk
-        glColor3f(0.55f, 0.35f, 0.15f);
-        glBegin(GL_QUADS);
-            glVertex2f(x-5, y-20); glVertex2f(x+5, y-20);
-            glVertex2f(x+5, y+15); glVertex2f(x-5, y+15);
-        glEnd();
-        // Leaves
-        glColor3f(0.1f, 0.7f, 0.1f);
-        for(int i=0; i<7; i++)
-        {
-            float ang = i * (360.0f/7) * PI / 180.0f;
-            drawFilledCircle(x + 15*cos(ang), y+15 + 10*sin(ang), 10);
-        }
-    }
-    else
-    {
-        glColor3f(0.55f, 0.35f, 0.15f);
-        glBegin(GL_QUADS);
-            glVertex2f(x-6, y-15); glVertex2f(x+6, y-15);
-            glVertex2f(x+6, y+10); glVertex2f(x-6, y+10);
-        glEnd();
-        glColor3f(0.1f, 0.7f, 0.1f);
-        drawFilledCircle(x, y+15, 15);
-    }
-}
+        glVertex2f(-455.0f,435.0f);
+        glVertex2f(-455.0f,425.0f);
+        glVertex2f(-355.0f,425.0f);
+        glVertex2f(-355.0f,435.0f);
 
-/* ================= SIMPLE CAR ================= */
-void drawSimpleCar(float x, float y, float angle, float r, float g, float b)
-{
-    glPushMatrix();
-    glTranslatef(x, y, 0);
-    glRotatef(angle, 0, 0, 1);
-    glColor3f(r, g, b);
+        glVertex2f(-455.0f,235.0f);
+        glVertex2f(-455.0f,225.0f);
+        glVertex2f(-355.0f,225.0f);
+        glVertex2f(-355.0f,235.0f);
+
+        glVertex2f(-250.0f,285.0f);
+        glVertex2f(-250.0f,385.0f);
+        glVertex2f(-325.0f,385.0f);
+        glVertex2f(-325.0f,285.0f);
+
+        glVertex2f(-73.0f,145.0f);
+        glVertex2f(-73.0f,520.0f);
+        glVertex2f(-230.0f,520.0f);
+        glVertex2f(-230.0f,145.0f);
+
+        glColor3ub(116, 184, 47);
+        glVertex2f(-460.0f,230.0f);
+        glVertex2f(-360.0f,230.0f);
+        glVertex2f(-360.0f,250.0f);
+        glVertex2f(-460.0f,250.0f);
+
+        glVertex2f(-460.0f,430.0f);
+        glVertex2f(-360.0f,430.0f);
+        glVertex2f(-360.0f,450.0f);
+        glVertex2f(-460.0f,450.0f);
+    glEnd();
+
+    glColor3ub(116, 184, 47);
+    drawFilledCircle(-460,440,10);
+    drawFilledCircle(-360,440,10);
+    drawFilledCircle(-460,240,10);
+    drawFilledCircle(-360,240,10);
+    glLineWidth(4.0f);
+    glColor3ub(0,0,0);
+    drawFilledCircle(0,0,150);
+    glLineWidth(4.0f);
+    glColor3ub(255,255,255);
+    drawHollowCircle(0,0,138);
+    glColor3ub(199, 227, 225);
+    drawFilledCircle(-330.0f,345.0f,50);
+
     glBegin(GL_QUADS);
-        glVertex2f(-10, -18); glVertex2f(10, -18);
-        glVertex2f(10, 18); glVertex2f(-10, 18);
+        glColor3ub(0,0,0);
+        glVertex2f(-70.0f, 540.0f);
+        glVertex2f(-70.0f, -540.0f);
+        glVertex2f(70.0f, -540.0f);
+        glVertex2f(70.0f, 540.0f);
+
+        glColor3ub(0,0,0);
+        glVertex2f(-960.0f, 70.0f);
+        glVertex2f(-960.0f, -70.0f);
+        glVertex2f(960.0f, -70.0f);
+        glVertex2f(960.0f, 70.0f);
+
     glEnd();
-    glColor3f(0.1f, 0.1f, 0.1f);
+
+    glLineWidth(4.0f);
+    glBegin(GL_LINES);
+        glColor3ub(255,255,255);
+        glVertex2f(-60.0f,540.0f);
+        glVertex2f(-60.0f,70.0f);
+
+        glVertex2f(60.0f,540.0f);
+        glVertex2f(60.0f,70.0f);
+
+        glVertex2f(-960.0f,60.0f);
+        glVertex2f(-70.0f,60.0f);
+
+        glVertex2f(-960.0f,-60.0f);
+        glVertex2f(-70.0f,-60.0f);
+
+        glVertex2f(960.0f,60.0f);
+        glVertex2f(70.0f,60.0f);
+
+        glVertex2f(960.0f,-60.0f);
+        glVertex2f(70.0f,-60.0f);
+
+        glVertex2f(-60.0f,-540.0f);
+        glVertex2f(-60.0f,-70.0f);
+
+        glVertex2f(60.0f,-540.0f);
+        glVertex2f(60.0f,-70.0f);
+
+    glEnd();
+
+    glLineWidth(4.0f);
+    glColor3ub(0,0,0);
+    drawFilledCircle(0,0,135);
+
+    glLineWidth(4.0f);
+    glColor3ub(255,255,255);
+    drawHollowCircle(0,0,80);
+
+    glLineWidth(4.0f);
+    glColor3ub(116, 184, 47);
+    drawFilledCircle(0,0,65);
+
+    glLineWidth(11.0f);
+    glBegin(GL_LINES);
+        glColor3ub(255,255,255);
+        //top
+        glVertex2f(0,500);
+        glVertex2f(0,450);
+
+        glVertex2f(0,400);
+        glVertex2f(0,350);
+
+        glVertex2f(0,300);
+        glVertex2f(0,250);
+
+        //cross
+        glVertex2f(0,200);
+        glVertex2f(0,150);
+
+        glVertex2f(-20,200);
+        glVertex2f(-20,150);
+
+        glVertex2f(-40,200);
+        glVertex2f(-40,150);
+
+        glVertex2f(20,200);
+        glVertex2f(20,150);
+
+        glVertex2f(40,200);
+        glVertex2f(40,150);
+
+        //Left
+
+        glVertex2f(-910,0);
+        glVertex2f(-860,0);
+
+        glVertex2f(-810,0);
+        glVertex2f(-760,0);
+
+        glVertex2f(-710,0);
+        glVertex2f(-660,0);
+
+        glVertex2f(-610,0);
+        glVertex2f(-560,0);
+
+        glVertex2f(-510,0);
+        glVertex2f(-460,0);
+
+        glVertex2f(-410,0);
+        glVertex2f(-360,0);
+
+        glVertex2f(-310,0);
+        glVertex2f(-260,0);
+
+        //cross
+        glVertex2f(-210,0);
+        glVertex2f(-160,0);
+
+        glVertex2f(-210,-20);
+        glVertex2f(-160,-20);
+
+        glVertex2f(-210,-40);
+        glVertex2f(-160,-40);
+
+        glVertex2f(-210,20);
+        glVertex2f(-160,20);
+
+        glVertex2f(-210,40);
+        glVertex2f(-160,40);
+
+        //bottom
+
+        glVertex2f(0,-500);
+        glVertex2f(0,-450);
+
+        glVertex2f(0,-400);
+        glVertex2f(0,-350);
+
+        glVertex2f(0,-300);
+        glVertex2f(0,-250);
+
+        //cross
+        glVertex2f(0,-200);
+        glVertex2f(0,-150);
+
+        glVertex2f(-20,-200);
+        glVertex2f(-20,-150);
+
+        glVertex2f(-40,-200);
+        glVertex2f(-40,-150);
+
+        glVertex2f(20,-200);
+        glVertex2f(20,-150);
+
+        glVertex2f(40,-200);
+        glVertex2f(40,-150);
+
+        //right
+
+        glVertex2f(910,0);
+        glVertex2f(860,0);
+
+        glVertex2f(810,0);
+        glVertex2f(760,0);
+
+        glVertex2f(710,0);
+        glVertex2f(660,0);
+
+        glVertex2f(610,0);
+        glVertex2f(560,0);
+
+        glVertex2f(510,0);
+        glVertex2f(460,0);
+
+        glVertex2f(410,0);
+        glVertex2f(360,0);
+
+        glVertex2f(310,0);
+        glVertex2f(260,0);
+
+        //cross
+        glVertex2f(210,0);
+        glVertex2f(160,0);
+
+        glVertex2f(210,-20);
+        glVertex2f(160,-20);
+
+        glVertex2f(210,-40);
+        glVertex2f(160,-40);
+
+        glVertex2f(210,20);
+        glVertex2f(160,20);
+
+        glVertex2f(210,40);
+        glVertex2f(160,40);
+
+    glEnd();
+
+    //Buildings
     glBegin(GL_QUADS);
-        glVertex2f(-7, -12); glVertex2f(7, -12);
-        glVertex2f(7, 12); glVertex2f(-7, 12);
+        glColor3ub(255,255,255);
+        glVertex2f(-80.0f,160.0f);
+        glVertex2f(-80.0f,530.0f);
+        glVertex2f(-250.0f,530.0f);
+        glVertex2f(-250.0f,160.0f);
+
+        glColor3ub(195, 195, 195);
+        glVertex2f(-100.0f,180.0f);
+        glVertex2f(-100.0f,510.0f);
+        glVertex2f(-230.0f,510.0f);
+        glVertex2f(-230.0f,180.0f);
+
+        glColor3ub(255,255,255);
+        glVertex2f(-250.0f,295.0f);
+        glVertex2f(-250.0f,395.0f);
+        glVertex2f(-325.0f,395.0f);
+        glVertex2f(-325.0f,295.0f);
+
+        glColor3ub(199, 227, 225);
+        glVertex2f(-130.0f,200.0f);
+        glVertex2f(-130.0f,230.0f);
+        glVertex2f(-200.0f,230.0f);
+        glVertex2f(-200.0f,200.0f);
+
+        glVertex2f(-130.0f,280.0f);
+        glVertex2f(-130.0f,310.0f);
+        glVertex2f(-200.0f,310.0f);
+        glVertex2f(-200.0f,280.0f);
+
+        glVertex2f(-130.0f,360.0f);
+        glVertex2f(-130.0f,390.0f);
+        glVertex2f(-200.0f,390.0f);
+        glVertex2f(-200.0f,360.0f);
+
+        glVertex2f(-130.0f,440.0f);
+        glVertex2f(-130.0f,470.0f);
+        glVertex2f(-200.0f,470.0f);
+        glVertex2f(-200.0f,440.0f);
+
+        glColor3ub(255,255,255);
+        glVertex2f(-410.0f,284.0f);
+        glVertex2f(-410.0f,405.0f);
+        glVertex2f(-460.0f,405.0f);
+        glVertex2f(-460.0f,284.0f);
+
+        glColor3ub(0, 255, 255);
+        glVertex2f(-420.0f,294.0f);
+        glVertex2f(-420.0f,395.0f);
+        glVertex2f(-450.0f,395.0f);
+        glVertex2f(-450.0f,294.0f);
+
+        glColor3ub(255,255,255);
+        glVertex2f(-400.0f,315.0f);
+        glVertex2f(-400.0f,375.0f);
+        glVertex2f(-470.0f,375.0f);
+        glVertex2f(-470.0f,315.0f);
+
+        glColor3ub(0, 255, 255);
+        glVertex2f(-405.0f,320.0f);
+        glVertex2f(-405.0f,370.0f);
+        glVertex2f(-465.0f,370.0f);
+        glVertex2f(-465.0f,320.0f);
+
     glEnd();
-    glPopMatrix();
+
+    glColor3ub(255,255,255);
+    drawFilledCircle(-325.0f,345.0f,50);
+    glColor3ub(199, 227, 225);
+    drawFilledCircle(-325.0f,345.0f,45);
+
+    glLineWidth(4.0f);
+    glBegin(GL_POINTS);
+        glColor3ub(0,0,0);
+        glVertex2f(-260.0f,390.0f);
+        glVertex2f(-260.0f,380.0f);
+        glVertex2f(-260.0f,370.0f);
+
+        glVertex2f(-260.0f,320.0f);
+        glVertex2f(-260.0f,310.0f);
+        glVertex2f(-260.0f,300.0f);
+    glEnd();
+
+    glColor3ub(255,255,255);
+    drawFilledCircle(-325.0f,345.0f,20);
+    glColor3ub(0,0,0);
+    drawFilledCircle(-325.0f,345.0f,7);
+    glColor3ub(255,255,0);
+    drawFilledCircle(-325.0f,345.0f,4);
+
+    glBegin(GL_LINES);
+        glColor3ub(255,255,255);
+        glVertex2f(-310.0f,345.0f);
+        glVertex2f(-280.0f,345.0f);
+
+        glVertex2f(-340.0f,345.0f);
+        glVertex2f(-370.0f,345.0f);
+
+        glVertex2f(-325.0f,355.0f);
+        glVertex2f(-325.0f,390.0f);
+
+        glVertex2f(-325.0f,335.0f);
+        glVertex2f(-325.0f,300.0f);
+    glEnd();
+
+
 }
 
-/* ================= DISPLAY ================= */
-void display()
-{
-    glClear(GL_COLOR_BUFFER_BIT);
+void display(){
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
-    // Green grass background
-    glColor3f(0.35f, 0.8f, 0.2f);
-    glBegin(GL_QUADS);
-        glVertex2f(-300,-300); glVertex2f(300,-300);
-        glVertex2f(300,300); glVertex2f(-300,300);
-    glEnd();
-
-    // Main roads
-    drawRoad(-300, 120, 300, 200);   // top horizontal
-    drawRoad(-300, -200, 300, -120); // bottom horizontal
-    drawRoad(-200, -300, -120, 300); // left vertical
-    drawRoad(120, -300, 200, 300);   // right vertical
-    drawRoad(-30, -300, 30, 300);    // central railway road
-
-    // Railway tracks
-    glColor3f(0.55f, 0.35f, 0.15f);
-    glBegin(GL_QUADS);
-        glVertex2f(-35,-300); glVertex2f(-25,-300); glVertex2f(-25,300); glVertex2f(-35,300);
-        glVertex2f(25,-300); glVertex2f(35,-300); glVertex2f(35,300); glVertex2f(25,300);
-    glEnd();
-
-    // Dashed lines
-    drawDashedCenter(true, 160, -300, 300); // top road
-    drawDashedCenter(true, -160, -300, 300); // bottom road
-    drawDashedCenter(false, -160, -300, 300); // left road
-    drawDashedCenter(false, 160, -300, 300); // right road
-
-    // Zebra crossings
-    drawZebra(-160, 160, true);  // top-left
-    drawZebra(-160, -160, true); // bottom-left
-    drawZebra(160, 160, true);   // top-right
-    drawZebra(160, -160, true);  // bottom-right
-    drawZebra(-160, 0, false);   // central left
-    drawZebra(160, 0, false);    // central right
-
-    // Train
-    glColor3f(0.9f, 0.9f, 0.9f);
-    glBegin(GL_QUADS);
-        glVertex2f(-25,140); glVertex2f(25,140); glVertex2f(25,200); glVertex2f(-25,200);
-        glVertex2f(-25,60); glVertex2f(25,60); glVertex2f(25,120); glVertex2f(-25,120);
-        glVertex2f(-25,-20); glVertex2f(25,-20); glVertex2f(25,40); glVertex2f(-25,40);
-        glVertex2f(-25,-100); glVertex2f(25,-100); glVertex2f(25,-40); glVertex2f(-25,-40);
-    glEnd();
-    glColor3f(0.1f, 0.5f, 0.9f);
-    glBegin(GL_QUADS);
-        glVertex2f(-25,200); glVertex2f(25,200); glVertex2f(25,240); glVertex2f(-25,240);
-    glEnd();
-
-    // Top-left small buildings
-    glColor3f(0.9f, 0.9f, 0.9f);
-    glBegin(GL_QUADS);
-        glVertex2f(-280,220); glVertex2f(-220,220); glVertex2f(-220,280); glVertex2f(-280,280);
-        glVertex2f(-280,160); glVertex2f(-220,160); glVertex2f(-220,200); glVertex2f(-280,200);
-    glEnd();
-
-    // Small pool top-left
-    glColor3f(0.2f, 0.7f, 1.0f);
-    drawFilledCircle(-100, 240, 22);
-
-    // Helipad
-    glColor3f(0.15f, 0.15f, 0.4f);
-    drawFilledCircle(-60, 170, 35);
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glLineWidth(5.0f);
-    glBegin(GL_LINES);
-        glVertex2f(-60,130); glVertex2f(-60,210);
-        glVertex2f(-100,170); glVertex2f(-20,170);
-    glEnd();
-    glColor3f(1.0f, 1.0f, 0.0f);
-    glBegin(GL_LINES);
-        glVertex2f(-60,140); glVertex2f(-60,200);
-        glVertex2f(-90,170); glVertex2f(-30,170);
-    glEnd();
-
-    // Red houses top
-    drawRedHouse(-80, 240);
-    drawRedHouse(-20, 240);
-    drawRedHouse(-50, 160);
-
-    // Stadium top-right
-    glColor3f(0.95f, 0.85f, 0.7f);
-    drawFilledCircle(120, 180, 90); // track
-    glColor3f(0.2f, 0.8f, 0.2f);
-    drawFilledCircle(120, 180, 65); // field
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glLineWidth(4.0f);
-    glBegin(GL_LINE_LOOP);
-        glVertex2f(55,115); glVertex2f(185,115);
-        glVertex2f(185,245); glVertex2f(55,245);
-    glEnd();
-    glBegin(GL_LINES);
-        glVertex2f(120,115); glVertex2f(120,245);
-    glEnd();
-    drawFilledCircle(120,180,12);
-
-    // Benches around stadium
-    glColor3f(0.8f, 0.4f, 0.2f);
-    for(int i=0; i<8; i++)
-    {
-        float ang = i*45*PI/180.0f;
-        float bx = 120 + 100*cos(ang);
-        float by = 180 + 100*sin(ang);
-        glBegin(GL_QUADS);
-            glVertex2f(bx-8,by-4); glVertex2f(bx+8,by-4);
-            glVertex2f(bx+8,by+4); glVertex2f(bx-8,by+4);
-        glEnd();
-    }
-
-    // Beach bottom-left
-    glColor3f(1.0f, 0.9f, 0.6f);
-    glBegin(GL_POLYGON);
-        glVertex2f(-300,-300); glVertex2f(-80,-300);
-        glVertex2f(-180,-140); glVertex2f(-300,-180);
-    glEnd();
-    glColor3f(0.2f, 0.6f, 1.0f);
-    drawFilledCircle(-220, -200, 55);
-    // Umbrellas
-    glColor3f(1.0f, 0.2f, 0.2f);
-    drawFilledCircle(-260,-220,15);
-    drawFilledCircle(-180,-230,15);
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glBegin(GL_LINES);
-        glVertex2f(-260,-235); glVertex2f(-260,-190);
-        glVertex2f(-180,-245); glVertex2f(-180,-200);
-    glEnd();
-    // Palm trees
-    drawTree(-280,-160,true); drawTree(-240,-180,true);
-    drawTree(-200,-200,true); drawTree(-160,-180,true);
-    drawTree(-220,-240,true);
-
-    // Central red houses + small pool
-    drawRedHouse(-80, -20);
-    drawRedHouse(-20, -20);
-    drawRedHouse(-80, -100);
-    drawRedHouse(-20, -100);
-    glColor3f(0.2f, 0.7f, 1.0f);
-    drawFilledCircle(-50, -60, 20);
-
-    // Parking lot bottom-right
-    glColor3f(0.2f, 0.2f, 0.2f);
-    glBegin(GL_QUADS);
-        glVertex2f(40,-220); glVertex2f(280,-220);
-        glVertex2f(280,-20); glVertex2f(40,-20);
-    glEnd();
-    glColor3f(0.9f, 0.7f, 0.2f);
-    glLineWidth(6.0f);
-    glBegin(GL_LINE_LOOP);
-        glVertex2f(40,-220); glVertex2f(280,-220);
-        glVertex2f(280,-20); glVertex2f(40,-20);
-    glEnd();
-
-    // Parked cars
-    drawSimpleCar(80,-40, 0, 0.9,0.2,0.2);    // red
-    drawSimpleCar(130,-40, 0, 0.2,0.8,0.2);   // green
-    drawSimpleCar(180,-40, 0, 1.0,1.0,0.0);   // yellow
-    drawSimpleCar(230,-40, 0, 0.5,0.0,1.0);   // purple
-
-    drawSimpleCar(80,-90, 180, 0.0,0.5,1.0);  // blue
-    drawSimpleCar(130,-90, 180, 1.0,0.5,0.0); // orange
-    drawSimpleCar(180,-90, 180, 0.8,0.8,0.8); // gray
-    drawSimpleCar(230,-90, 180, 1.0,0.0,1.0); // magenta
-
-    drawSimpleCar(80,-140, 0, 0.2,0.8,0.8);   // cyan
-    drawSimpleCar(130,-140, 0, 0.0,0.0,0.0);  // black
-
-    // Hospital symbol
-    glColor3f(0.2f, 0.7f, 1.0f);
-    drawFilledCircle(240, -160, 18);
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glLineWidth(5);
-    glBegin(GL_LINES);
-        glVertex2f(240, -178); glVertex2f(240, -142);
-        glVertex2f(222, -160); glVertex2f(258, -160);
-    glEnd();
-
-    // Bottom long buildings
-    glColor3f(0.9f, 0.9f, 0.9f);
-    glBegin(GL_QUADS);
-        glVertex2f(-100,-280); glVertex2f(-20,-280); glVertex2f(-20,-230); glVertex2f(-100,-230);
-        glVertex2f(40,-280); glVertex2f(140,-280); glVertex2f(140,-230); glVertex2f(40,-230);
-        glVertex2f(160,-280); glVertex2f(280,-280); glVertex2f(280,-230); glVertex2f(160,-230);
-    glEnd();
-
-    // Trees scattered
-    drawTree(-220,80,false);
-    drawTree(220,120,false);
-    drawTree(220,-80,false);
-    drawTree(-220,-240,false);
-    drawTree(240,-100,false);
-
-    // Cars on roads
-    drawSimpleCar(-10,160,0,1.0,0.8,0.0);     // yellow on top road
-    drawSimpleCar(160,10,270,0.9,0.3,0.1);    // red on right road
-    drawSimpleCar(-10,-160,180,0.0,0.6,1.0);  // blue on bottom
-    drawSimpleCar(-160,-10,90,0.2,0.8,0.2);   // green on left
+    BackGround();
 
     glutSwapBuffers();
 }
 
-/* ================= INIT ================= */
-void init()
+void MyInit()
 {
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.455f, 0.722f, 0.184f, 1.0f); //Grass Color Background
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glPointSize(4.0f);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-300, 300, -300, 300);
-    glMatrixMode(GL_MODELVIEW);
+    gluOrtho2D(-960, 960, -540, 540);
 }
 
-/* ================= MAIN ================= */
-void startMainGame(int argc, char** argv)
+void reshape(GLsizei width, GLsizei height)
+{
+    if (height == 0) height = 1;
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-960, 960, -540, 540);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
+
+int startMainGame(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(1080, 720);
-    glutCreateWindow("Exact City Scene Matching Your Picture");
-    init();
+    glutInitWindowSize(1920, 1080);
+    glutInitWindowPosition(0, 0);
+    glutCreateWindow("Flight Dash");
+    glutReshapeFunc(reshape);
+    glutIdleFunc(idle);
+    MyInit();
     glutDisplayFunc(display);
     glutMainLoop();
 }
