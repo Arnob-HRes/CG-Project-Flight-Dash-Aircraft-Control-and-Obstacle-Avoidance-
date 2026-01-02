@@ -1,11 +1,12 @@
 # depslib dependency file v1.0
-1767020499 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\main.cpp
+1767381624 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\main.cpp
 	<iostream>
-	<fstream>
 	<string.h>
 	<cstdlib>
 	<windows.h>
 	<GL/glut.h>
+	<mysql.h>
+	<sstream>
 
 1341006776 a:\softwares\codeblocks_graphice\codeblocks\mingw\include\string.h
 	<_mingw.h>
@@ -222,12 +223,42 @@
 	<stddef.h>
 	<GL/gl.h>
 
-1767164186 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\main_game_page.cpp
+1767381558 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\main_game_page.cpp
 	<windows.h>
+	<fstream>
 	<GL/glut.h>
 	<cmath>
+	<string>
+	<sstream>
 
 1767021654 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\resources.rc
 
 1767164240 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\animation.cpp
+
+1476096933 a:\softwares\codeblocks_graphice\dev-cpp\mingw64\include\mysql.h
+	<sys/types.h>
+	<winsock.h>
+	"mysql_com.h"
+	"mysql_time.h"
+	"mysql_version.h"
+	"typelib.h"
+	"my_list.h"
+	"my_alloc.h"
+
+1341006780 a:\softwares\codeblocks_graphice\codeblocks\mingw\include\sys\types.h
+	<_mingw.h>
+	<stddef.h>
+
+1476096946 a:\softwares\codeblocks_graphice\dev-cpp\mingw64\include\mysql_com.h
+
+1476096972 a:\softwares\codeblocks_graphice\dev-cpp\mingw64\include\mysql_time.h
+
+1476096983 a:\softwares\codeblocks_graphice\dev-cpp\mingw64\include\mysql_version.h
+	<custom_conf.h>
+
+1476097123 a:\softwares\codeblocks_graphice\dev-cpp\mingw64\include\typelib.h
+
+1476097168 a:\softwares\codeblocks_graphice\dev-cpp\mingw64\include\my_list.h
+
+1476097177 a:\softwares\codeblocks_graphice\dev-cpp\mingw64\include\my_alloc.h
 
