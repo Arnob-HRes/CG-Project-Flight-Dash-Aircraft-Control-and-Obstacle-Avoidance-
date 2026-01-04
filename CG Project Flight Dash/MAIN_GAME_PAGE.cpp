@@ -814,12 +814,29 @@ void renderText(float x,float y,const char *string){
     glEnable(GL_TEXTURE_2D);
 }
 
+void topblur(){
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor4f(0.78f, 0.83f, 0.88f, 0.60f);
+    glBegin(GL_QUADS);
+    glVertex2f(-960.0f,-540.0f);
+    glVertex2f(960.0f,-540.0f);
+    glVertex2f(960.0f,540.0f);
+    glVertex2f(-960.0f,540.0f);
+    glEnd();
+}
+
+void cloudAnimation(){
+
+}
+
 void BackGround(){
 
     BuildindOneAndRoad();
     BuildingTwo();
     FootballField();
     Beach();
+    topblur();
     std::stringstream ss;
     ss << score;
     //renderText(-200,-400,ss.str().c_str());
@@ -859,7 +876,7 @@ void setScore(int S){
     score=S;
 }
 
-int startMainGame(int argc, char** argv)
+int startMainGame(int argc, char** argv, int score)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
