@@ -121,7 +121,7 @@ void LOGIN_PAGE(){
     else{
         system("cls");
         cout<<"\t\t\t\t_______________________________________________________________\n\n";
-        cout<<"\t\t\t\t  Unsuccessful Login [Invalid username or password ["<<USER<<"]\n\n";
+        cout<<"\t\t\t\t[Unsuccessful Login [Invalid username or password ["<<USER<<"] ]\n\n";
         cout<<"\t\t\t\t_______________________________________________________________\n\n";
         main();
     }

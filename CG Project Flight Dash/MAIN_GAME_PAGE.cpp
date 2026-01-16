@@ -4,9 +4,12 @@
 #include <cmath>
 #include <string>
 #include <sstream>
+using namespace std;
 
-int score;
-
+int score,level,cscore;
+float flightX=-800.0f, flightY=0.0f;
+float speed1 = 2.0f,speed2 = 3.0f,speed3 = 4.0f,speed4 = 2.0f,speed5 = 1.0f;
+float cloudPosition = 960.9f, cloudPosition2 = 960.9f, cloudPosition3 = 960.9f, cloudPosition4 = 960.9f, cloudPosition5 = 960.9f;
 float PI = 3.14159265f;
 void idle() {
  glutPostRedisplay();
@@ -797,27 +800,26 @@ void Beach()
 
 }
 
-void renderText(float x,float y,const char *string){
-    int lenn;
+void renderTextBig(float x, float y, float scale, const char* text)
+{
+    glPushMatrix();
+    glTranslatef(x, y, 0.0f);
+    glScalef(scale, scale, 1.0f);
+
     glColor3ub(255,255,255);
 
-    glRasterPos2i(x,y);
-
-    glDisable(GL_TEXTURE);
-    glDisable(GL_TEXTURE_2D);
-
-    for(int i=0,lenn=strlen(string);i<lenn;i++){
-        glutBitmapCharacter(GLUT_BITMAP_8_BY_13, (int)string[i]);
+    for (int i = 0; text[i] != '\0'; i++)
+    {
+        glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, text[i]);
     }
 
-    glEnable(GL_TEXTURE);
-    glEnable(GL_TEXTURE_2D);
+    glPopMatrix();
 }
 
-void topblur(){
+void topblur(float x, float y, float z, float w){
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glColor4f(0.78f, 0.83f, 0.88f, 0.60f);
+    glColor4f(x,y,z,w);
     glBegin(GL_QUADS);
     glVertex2f(-960.0f,-540.0f);
     glVertex2f(960.0f,-540.0f);
@@ -829,38 +831,6 @@ void topblur(){
 void cloudAnimation(){
 
 }
-
-void BackGround(){
-
-    BuildindOneAndRoad();
-    BuildingTwo();
-    FootballField();
-    Beach();
-    topblur();
-    std::stringstream ss;
-    ss << score;
-    //renderText(-200,-400,ss.str().c_str());
-}
-
-void display(){
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
-
-    BackGround();
-
-    glutSwapBuffers();
-}
-
-void MyInit()
-{
-    glClearColor(0.455f, 0.722f, 0.184f, 1.0f); //Grass Color Background
-    glColor3f(0.0f, 0.0f, 0.0f);
-    glPointSize(4.0f);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(-960, 960, -540, 540);
-}
-
 void reshape(GLsizei width, GLsizei height)
 {
     if (height == 0) height = 1;
@@ -871,12 +841,261 @@ void reshape(GLsizei width, GLsizei height)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
-
+void drawCircle(float x, float y, float radius) {
+    glBegin(GL_TRIANGLE_FAN);
+    for (int i = 0; i <= 100; i++) {
+        float angle = 2.0f * 3.1415926f * i / 100;
+        float dx = radius * cosf(angle);
+        float dy = radius * sinf(angle);
+        glVertex2f(x + dx, y + dy);
+    }
+    glEnd();
+}
 void setScore(int S){
     score=S;
 }
+void FighterPlaneTopView(float x, float y, float scale, float angle)
+{
+    glPushMatrix();
 
-int startMainGame(int argc, char** argv, int score)
+    glTranslatef(x, y, 0.0f);   // position first
+    glRotatef(angle, 0, 0, 1);  // rotate around Z-axis
+    glScalef(scale, scale, 1.0f);
+
+    // ===== Fuselage =====
+    glBegin(GL_POLYGON);
+    glColor3ub(120,120,120);
+    glVertex2f(0, 120);
+    glVertex2f(15, 60);
+    glVertex2f(15, -80);
+    glVertex2f(-15, -80);
+    glVertex2f(-15, 60);
+    glEnd();
+
+    // ===== Wings =====
+    glBegin(GL_TRIANGLES);
+    glColor3ub(90,90,90);
+
+    glVertex2f(-15, 30);
+    glVertex2f(-120, -10);
+    glVertex2f(-15, -40);
+
+    glVertex2f(15, 30);
+    glVertex2f(120, -10);
+    glVertex2f(15, -40);
+    glEnd();
+
+    // ===== Tail =====
+    glBegin(GL_TRIANGLES);
+    glColor3ub(80,80,80);
+
+    glVertex2f(-15, -60);
+    glVertex2f(-60, -90);
+    glVertex2f(-15, -90);
+
+    glVertex2f(15, -60);
+    glVertex2f(60, -90);
+    glVertex2f(15, -90);
+    glEnd();
+
+    // ===== Cockpit =====
+    glColor3ub(0,180,220);
+    drawFilledCircle(0, 40, 12);
+
+    glPopMatrix();
+}
+
+void BackGround(){
+
+    BuildindOneAndRoad();
+    BuildingTwo();
+    FootballField();
+    Beach();
+    topblur(0.78f, 0.83f, 0.88f, 0.60f);
+    glColor3ub(255,255,255);
+    drawCircle(cloudPosition-10.0f, 200.0f, 60.0f);
+    drawCircle(cloudPosition, 220.0f, 50.0f);
+    drawCircle(cloudPosition + 15.0f, 180.0f, 40.0f);
+    drawCircle(cloudPosition + 10.0f, 210.0f, 40.0f);
+    drawCircle(cloudPosition + 50.0f, 200.0f, 40.0f);
+
+    drawCircle(cloudPosition2-50.0f, 400.0f, 30.0f);
+    drawCircle(cloudPosition2, 420.0f, 50.0f);
+    drawCircle(cloudPosition2 + 15.0f, 380.0f, 40.0f);
+    drawCircle(cloudPosition2 + 50.0f, 400.0f, 40.0f);
+
+    drawCircle(cloudPosition3-10.0f, -190.0f, 50.0f);
+    drawCircle(cloudPosition3, -210.0f, 50.0f);
+    drawCircle(cloudPosition3 + 15.0f, -180.0f, 50.0f);
+    drawCircle(cloudPosition3 + 10.0f, -210.0f, 40.0f);
+    drawCircle(cloudPosition3 + 50.0f, -200.0f, 60.0f);
+
+    drawCircle(cloudPosition4-50.0f, -350.0f, 30.0f);
+    drawCircle(cloudPosition4, -370.0f, 50.0f);
+    drawCircle(cloudPosition4 + 15.0f, -330.0f, 40.0f);
+    drawCircle(cloudPosition4 + 50.0f, -350.0f, 40.0f);
+
+    drawCircle(cloudPosition5-50.0f, 0.0f, 30.0f);
+    drawCircle(cloudPosition5, -20.0f, 50.0f);
+    drawCircle(cloudPosition5 + 15.0f, -60.0f, 40.0f);
+    drawCircle(cloudPosition5 + 50.0f, -20.0f, 40.0f);
+    topblur(0.96f, 0.98f, 1.00f, 0.20f);
+    FighterPlaneTopView(flightX, flightY, 1.0f, -90.0f);
+    std::stringstream ss;
+    std::stringstream ss2;
+    std::stringstream ss3;
+    std::stringstream ss4;
+    std::stringstream ss5;
+    std::stringstream ss6;
+    std::stringstream ss7;
+    ss << "You preveous highest score is: " <<score;
+    renderTextBig(-940, -520, 0.15f, ss.str().c_str());
+
+    ss2 << "Current score: 0";
+    renderTextBig(-940, -490, 0.18f, ss2.str().c_str());
+
+    ss3 << "LEVEL:"<<level;
+    renderTextBig(-120, 490, 0.35f, ss3.str().c_str());
+
+    ss4 << "(A/Left arrow) -> Go Left";
+    renderTextBig(440, -430, 0.18f, ss4.str().c_str());
+
+    ss5 << "(D/Right arrow) -> Go Right";
+    renderTextBig(440, -460, 0.18f, ss5.str().c_str());
+
+    ss6 << "(W/Up arrow) -> Go UP";
+    renderTextBig(440, -490, 0.18f, ss6.str().c_str());
+
+    ss7 << "(S/Down arrow) -> Go Down";
+    renderTextBig(440, -520, 0.18f, ss7.str().c_str());
+}
+void playmainmusic(const string& path){
+    PlaySound(path.c_str(), NULL, SND_FILENAME|SND_ASYNC|SND_LOOP);
+}
+void display(){
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+
+    BackGround();
+    glutSwapBuffers();
+}
+void update(int value){
+    cloudPosition -= speed1;
+    cloudPosition2 -= speed2;
+    cloudPosition3 -= speed3;
+    cloudPosition4 -= speed4;
+    cloudPosition5 -= speed5;
+    if (cloudPosition < -980.9f) {
+        cloudPosition = 960.9f;
+    }
+    if (cloudPosition2 < -980.9f) {
+        cloudPosition2 = 960.9f;
+    }
+    if (cloudPosition3 < -980.9f) {
+        cloudPosition3 = 960.9f;
+    }
+    if (cloudPosition4 < -980.9f) {
+        cloudPosition4 = 960.9f;
+    }
+    if (cloudPosition5 < -980.9f) {
+        cloudPosition5 = 960.9f;
+    }
+    if(flightX < -860.0f){
+        flightX=-860.0f;
+    }
+    if(flightX > 840.0f){
+        flightX=840.0f;
+    }
+    if(flightY > 400.0f){
+        flightY=400.0f;
+    }
+    if(flightY < -400.0f){
+        flightY=-400.0f;
+    }
+    glutPostRedisplay();
+    glutTimerFunc(16, update, 0);
+}
+void MyInit()
+{
+    glClearColor(0.455f, 0.722f, 0.184f, 1.0f);
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glPointSize(4.0f);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-960, 960, -540, 540);
+}
+void handleKeypress(unsigned char key, int x, int y) {
+        switch (key) {
+    case 'a':
+        flightX -= 10.0f;
+        break;
+    case 'A':
+        flightX -= 10.0f;
+        break;
+    case 'w':
+        flightY += 10.0f;
+        break;
+    case 'W':
+        flightY += 10.0f;
+        break;
+    case 's':
+        flightY -= 10.0f;
+        break;
+    case 'S':
+        flightY -= 10.0f;
+        break;
+    case 'd':
+        flightX += 10.0f;
+        break;
+    case 'D':
+        flightX += 10.0f;
+        break;
+    glutPostRedisplay();
+	}
+}
+void handleSpecialKeypress(int key, int x, int y)
+{
+    switch (key)
+    {
+        case GLUT_KEY_LEFT:
+            flightX -= 10.0f;
+            break;
+
+        case GLUT_KEY_RIGHT:
+            flightX += 10.0f;
+            break;
+
+        case GLUT_KEY_UP:
+            flightY += 10.0f;
+            break;
+
+        case GLUT_KEY_DOWN:
+            flightY -= 10.0f;
+            break;
+    }
+
+    glutPostRedisplay();
+}
+void handleMouse(int button, int state, int x, int y) {
+    if (button == GLUT_LEFT_BUTTON)
+        {
+            speed1 += 1.0f;
+            speed2 += 1.0f;
+            speed3 += 1.0f;
+            speed4 += 1.0f;
+            speed5 += 1.0f;
+        }
+    if (button == GLUT_RIGHT_BUTTON)
+        {
+            speed1 -= 1.0f;
+            speed2 -= 1.0f;
+            speed3 -= 1.0f;
+            speed4 -= 1.0f;
+            speed5 -= 1.0f;
+        }
+    glutPostRedisplay();
+}
+int startMainGame(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
@@ -885,7 +1104,12 @@ int startMainGame(int argc, char** argv, int score)
     glutCreateWindow("Flight Dash");
     glutReshapeFunc(reshape);
     glutIdleFunc(idle);
-    MyInit();
     glutDisplayFunc(display);
+    glutTimerFunc(0, update, 0);
+    MyInit();
+    playmainmusic("A:/Documents/FALL 2025-2026/COMPUTER GRAPHICS J/CG Project Flight Dash/CG Project Flight Dash/CG Project Flight Dash/resource/edm-gaming-music-335408.wav");
+    glutKeyboardFunc(handleKeypress);
+    glutSpecialFunc(handleSpecialKeypress);
+    glutMouseFunc(handleMouse);
     glutMainLoop();
 }
