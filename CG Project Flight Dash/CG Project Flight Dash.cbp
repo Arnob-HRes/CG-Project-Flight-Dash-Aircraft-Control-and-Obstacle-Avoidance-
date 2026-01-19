@@ -46,7 +46,6 @@
 			<Add library="gdi32" />
 			<Add directory="A:/Softwares/Codeblocks_Graphice/CodeBlocks/MinGW/lib" />
 		</Linker>
-		<Unit filename="MAIN_GAME_PAGE.cpp" />
 		<Unit filename="Resources.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>

@@ -1,7 +1,9 @@
 # depslib dependency file v1.0
-1768466154 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\main.cpp
+1768858340 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\main.cpp
 	<iostream>
 	<string.h>
+	<cmath>
+	<string>
 	<cstdlib>
 	<windows.h>
 	<GL/glut.h>
@@ -223,10 +225,10 @@
 	<stddef.h>
 	<GL/gl.h>
 
-1768481843 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\main_game_page.cpp
+1768552732 source:a:\documents\fall 2025-2026\computer graphics j\cg project flight dash\cg project flight dash\cg project flight dash\main_game_page.cpp
 	<windows.h>
-	<fstream>
 	<GL/glut.h>
+	<mysql.h>
 	<cmath>
 	<string>
 	<sstream>
